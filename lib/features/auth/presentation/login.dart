@@ -4,6 +4,7 @@ import 'package:social/appColors/lightmode.dart';
 import 'package:social/commonWidgets/myButton.dart';
 import 'package:social/commonWidgets/textfield.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
+import 'package:social/features/auth/presentation/register.dart';
 import 'package:social/features/home/presentation/home_page.dart';
 
 class LoginPage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _LoginPageState extends State<LoginPage> {
             }
 
             if (state is Success) {
+              Navigator.of(context).popUntil((route) => route.isFirst);
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => HomePage()));
             }
@@ -48,11 +50,11 @@ class _LoginPageState extends State<LoginPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    // SvgPicture.asset(
-                    //   "assets/login.svg",
-                    //   height: 100,
-                    //   width: 100,
-                    // ),
+                    Text(
+                      "Login here to stay connected with friends!",
+                      style:
+                          TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                    ),
                     SizedBox(
                       height: 50,
                     ),
@@ -72,7 +74,32 @@ class _LoginPageState extends State<LoginPage> {
                       obsqureText: true,
                     ),
                     SizedBox(
-                      height: 20,
+                      height: 10,
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text("Don't have an account?",
+                            style: TextStyle(fontWeight: FontWeight.bold)),
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => RegisterPage()));
+                          },
+                          child: Text(
+                            "Register",
+                            style: TextStyle(
+                                color: AppColors.primaryLightColor,
+                                fontSize: 15),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 10,
                     ),
                     MyButton(
                         title: "Login",

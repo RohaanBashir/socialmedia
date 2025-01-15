@@ -4,6 +4,7 @@ import 'package:social/appColors/lightmode.dart';
 import 'package:social/commonWidgets/myButton.dart';
 import 'package:social/commonWidgets/textfield.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
+import 'package:social/features/auth/presentation/login.dart';
 import 'package:social/features/home/presentation/home_page.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -32,7 +33,7 @@ class _LoginPageState extends State<RegisterPage> {
         body: BlocConsumer<AuthCubit, AuthState>(
           listener: (context, state) {
             if (state is Success) {
-              Navigator.pop(context);
+              Navigator.of(context).popUntil((route) => route.isFirst);
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => HomePage()));
             }
@@ -56,7 +57,17 @@ class _LoginPageState extends State<RegisterPage> {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // SvgPicture.asset("assets/login.svg"),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                            width: 250,
+                            child: Text(
+                              "Register to start using the app!",
+                              style: TextStyle(
+                                  fontSize: 30, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
                         SizedBox(
                           height: 50,
                         ),
@@ -96,7 +107,34 @@ class _LoginPageState extends State<RegisterPage> {
                           obsqureText: true,
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Already have an account?",
+                              style: TextStyle(fontWeight: FontWeight.bold),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => LoginPage()));
+                              },
+                              child: Text(
+                                "Login",
+                                style: TextStyle(
+                                    color: AppColors.primaryLightColor,
+                                    fontSize: 15),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
                         ),
                         MyButton(
                             title: "Register",

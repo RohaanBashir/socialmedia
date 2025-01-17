@@ -142,7 +142,7 @@ class _LoginPageState extends State<RegisterPage> {
                               if (passController.text ==
                                   conPassController.text) {
                                 authCubit.register(nameController.text,
-                                    emailController.text, emailController.text);
+                                    emailController.text, passController.text);
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                     content: Text(

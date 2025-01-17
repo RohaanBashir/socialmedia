@@ -6,15 +6,16 @@ import 'package:social/features/auth/cubit/auth_cubit.dart';
 import 'package:social/features/auth/presentation/login.dart';
 import 'package:social/features/auth/presentation/register.dart';
 import 'package:social/features/home/cubit/home_cubit.dart';
+import 'package:social/features/home/presentation/home_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: 'https://kggaaykornvmlmcomopz.supabase.co',
+    url: 'https://fxdetvhzodhrgkrqiuxq.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImtnZ2FheWtvcm52bWxtY29tb3B6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzY3Nzg4ODksImV4cCI6MjA1MjM1NDg4OX0.85HU08WGbnGgFwhwqJ0wUjo9kqESLlrf_JZ9e2Q12i8',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4ZGV0dmh6b2RocmdrcnFpdXhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcxMDY1NTcsImV4cCI6MjA1MjY4MjU1N30.neqPqf4wIO1nPco85T_9Qy3foGE46tgsLiVsnPHitv4',
   );
 }
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
         // Add more BlocProvider instances here
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           scaffoldBackgroundColor: const Color.fromARGB(250, 255, 255, 255),

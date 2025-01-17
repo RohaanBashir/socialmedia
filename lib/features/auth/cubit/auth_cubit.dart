@@ -19,14 +19,23 @@ class AuthCubit extends Cubit<AuthState> {
   void login(String email, String pass) async {
     try {
       emit(Loading());
-      await repo.loginWithEmailAndPass(email, pass);
+
+      AuthResponse res = await repo.loginWithEmailAndPass(email, pass);
+      final id = res.user!.id;
+
+      final response =
+          await supabase.from('user').select().eq('uid', id).single();
+      print(id);
+
+      currentUser =
+          MyUser(response['name'], response['email'], response['uid']);
       emit(Success());
     } catch (e) {
       emit(Error(e.toString()));
     }
   }
 
-  void register(String name, String pass, String email) async {
+  void register(String name, String email, String pass) async {
     try {
       emit(Loading());
       AuthResponse res = await repo.registerWithEmailAndPass(email, pass);

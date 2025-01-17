@@ -16,6 +16,8 @@ class SupabaseAuthRepo extends AuthRepo {
   @override
   Future<AuthResponse> loginWithEmailAndPass(String email, String pass) async {
     try {
+      print(email);
+      print(pass);
       AuthResponse res =
           await supabase.auth.signInWithPassword(email: email, password: pass);
       return res;
@@ -27,6 +29,8 @@ class SupabaseAuthRepo extends AuthRepo {
   @override
   Future<AuthResponse> registerWithEmailAndPass(
       String email, String pass) async {
+    print(email);
+    print(pass);
     try {
       AuthResponse res = await supabase.auth.signUp(
         email: email,

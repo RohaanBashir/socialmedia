@@ -37,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
 
             if (state is Success) {
               Navigator.of(context).popUntil((route) => route.isFirst);
+              Navigator.pop(context);
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => HomePage()));
             }
@@ -104,6 +105,9 @@ class _LoginPageState extends State<LoginPage> {
                     MyButton(
                         title: "Login",
                         onPressed: () {
+                          print(emailController.text);
+                          print(passController.text);
+
                           authCubit.login(
                               emailController.text, passController.text);
                         })

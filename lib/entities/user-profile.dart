@@ -2,28 +2,19 @@
 
 class UserProfile {
   UserProfile({
-    required this.name,
-    required this.email,
+    required this.uId,
+    this.name = "",
+    this.email = "",
     this.description = "Enter Description",
+    this.profilePicture = "",
+    this.followers = '0',
+    this.follwing = '0',
   });
-
+  final String uId;
   final String name;
   final String email;
-  final String description;
-
-  factory UserProfile.fromJson(Map<String, dynamic> json) {
-    return UserProfile(
-      name: json['name'],
-      email: json['email'],
-      description: json['description'],
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'email': email,
-      'description': description,
-    };
-  }
+  String description;
+  String profilePicture;
+  final String followers;
+  final String follwing;
 }

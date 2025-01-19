@@ -6,6 +6,7 @@ import 'package:social/commonWidgets/textfield.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
 import 'package:social/features/auth/presentation/register.dart';
 import 'package:social/features/home/presentation/home_page.dart';
+import 'package:social/features/profile/cubit/profile_cubit.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,6 +22,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final authCubit = BlocProvider.of<AuthCubit>(context);
+    final profileCubit = BlocProvider.of<ProfileCubit>(context);
+
     return Scaffold(
         appBar: AppBar(
             titleTextStyle: TextStyle(
@@ -36,6 +39,7 @@ class _LoginPageState extends State<LoginPage> {
             }
 
             if (state is Success) {
+              profileCubit.fetchProfileData(authCubit.currentUser!);
               Navigator.of(context).popUntil((route) => route.isFirst);
               Navigator.pop(context);
               Navigator.push(
@@ -105,9 +109,6 @@ class _LoginPageState extends State<LoginPage> {
                     MyButton(
                         title: "Login",
                         onPressed: () {
-                          print(emailController.text);
-                          print(passController.text);
-
                           authCubit.login(
                               emailController.text, passController.text);
                         })

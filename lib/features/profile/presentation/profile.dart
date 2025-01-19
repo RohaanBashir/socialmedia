@@ -1,6 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:social/appColors/lightmode.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
+import 'package:social/features/editprofile/presentation/edit_page.dart';
+import 'package:social/features/profile/cubit/profile_cubit.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -13,6 +17,7 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     final authCubit = BlocProvider.of<AuthCubit>(context);
+    final profileCubit = BlocProvider.of<ProfileCubit>(context);
 
     return Scaffold(
         appBar: AppBar(
@@ -21,9 +26,14 @@ class _ProfilePageState extends State<ProfilePage> {
           title: Text(authCubit.currentUser!.name),
           actions: [
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Icon(Icons.edit),
-            )
+                padding: const EdgeInsets.all(8.0),
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (context) => EditProfile()));
+                  },
+                  child: Icon(Icons.edit),
+                ))
           ],
         ),
         body: Column(
@@ -35,23 +45,42 @@ class _ProfilePageState extends State<ProfilePage> {
             Center(
               child: Column(
                 children: [
-                  CircleAvatar(
-                    radius: 50,
-                    backgroundImage: NetworkImage(
-                        'https://cdn.pixabay.com/photo/2015/04/23/22/00/new-year-background-736885_1280.jpg'),
+                  Container(
+                    height: 200,
+                    width: 200,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                    ),
+                    child: Stack(
+                      children: [
+                        ClipOval(
+                          child: CachedNetworkImage(
+                            imageUrl:
+                                profileCubit.currentProfile!.profilePicture,
+                            placeholder: (context, url) =>
+                                Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
+                            fit: BoxFit.cover,
+                            width: 200,
+                            height: 200,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(height: 10),
                   Text(
-                    "Followers: 24 ",
+                    "Followers: ${profileCubit.currentProfile!.followers}",
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
-                  Text("Following: 155",
+                  Text("Following: ${profileCubit.currentProfile!.follwing}",
                       style:
                           TextStyle(fontWeight: FontWeight.bold, fontSize: 20)),
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                    padding: const EdgeInsets.symmetric(vertical: 15.0),
                     child: Text(
-                      "I am a hard working, honest individual. I am a good timekeeper, always willing to learn new skills. I am friendly, helpful and polite,",
+                      profileCubit.currentProfile!.description,
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 16),
                     ),

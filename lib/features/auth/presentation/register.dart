@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social/appColors/lightmode.dart';
 import 'package:social/commonWidgets/myButton.dart';
 import 'package:social/commonWidgets/textfield.dart';
+import 'package:social/entities/user-profile.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
 import 'package:social/features/auth/presentation/login.dart';
 import 'package:social/features/home/presentation/home_page.dart';
+import 'package:social/features/profile/cubit/profile_cubit.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -23,6 +25,7 @@ class _LoginPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     AuthCubit authCubit = BlocProvider.of<AuthCubit>(context);
+    ProfileCubit profileCubit = BlocProvider.of<ProfileCubit>(context);
     return Scaffold(
         appBar: AppBar(
             titleTextStyle: TextStyle(
@@ -33,6 +36,8 @@ class _LoginPageState extends State<RegisterPage> {
         body: BlocConsumer<AuthCubit, AuthState>(
           listener: (context, state) {
             if (state is Success) {
+              profileCubit.updateProfileData(authCubit.currentUser!,
+                  UserProfile(uId: authCubit.currentUser!.uId));
               Navigator.of(context).popUntil((route) => route.isFirst);
               Navigator.push(
                   context, MaterialPageRoute(builder: (context) => HomePage()));

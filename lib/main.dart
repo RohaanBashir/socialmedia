@@ -5,8 +5,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
 import 'package:social/features/auth/presentation/login.dart';
 import 'package:social/features/auth/presentation/register.dart';
+import 'package:social/features/editprofile/cubit/editprofile_cubit.dart';
 import 'package:social/features/home/cubit/home_cubit.dart';
 import 'package:social/features/home/presentation/home_page.dart';
+import 'package:social/features/profile/cubit/profile_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
@@ -31,6 +33,13 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<HomeCubit>(
           create: (context) => HomeCubit(),
+        ),
+
+        BlocProvider<EditprofileCubit>(
+          create: (context) => EditprofileCubit(),
+        ),
+        BlocProvider<ProfileCubit>(
+          create: (context) => ProfileCubit(),
         ),
         // Add more BlocProvider instances here
       ],

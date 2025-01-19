@@ -14,6 +14,7 @@ class AuthCubit extends Cubit<AuthState> {
 
   MyUser? currentUser;
   AuthRepo repo = SupabaseAuthRepo();
+
   final supabase = Supabase.instance.client;
 
   void login(String email, String pass) async {

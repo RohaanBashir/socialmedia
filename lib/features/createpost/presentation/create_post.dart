@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:social/appColors/lightmode.dart';
 import 'package:social/commonWidgets/textfield.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
@@ -33,10 +32,11 @@ class _CreatePostState extends State<CreatePost> {
             padding: const EdgeInsets.all(15.0),
             child: GestureDetector(
               onTap: () async {
-                if(image!=null){
+                if (image != null) {
                   imgUrl = await postCreateCubit.saveImgToStore(image!);
                   if (imgUrl != null) {
-                    postCreateCubit.createPost(description.text, imgUrl!, authCubit.currentUser!);
+                    postCreateCubit.createPost(
+                        description.text, imgUrl!, authCubit.currentUser!);
                   }
                 }
               },
@@ -75,35 +75,35 @@ class _CreatePostState extends State<CreatePost> {
       body: BlocConsumer<CreatepostCubit, CreatepostState>(
           bloc: postCreateCubit,
           listener: (context, state) {
-
-            if(state is CreatePostError){
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+            if (state is CreatePostError) {
+              ScaffoldMessenger.of(context)
+                  .showSnackBar(SnackBar(content: Text(state.error)));
             }
-            if(state is CreatePostImageSelected){
+            if (state is CreatePostImageSelected) {
               image = state.imgFile;
             }
-            if(state is CreatePostImgSavedToStore){
+            if (state is CreatePostImgSavedToStore) {
               imgUrl = state.imgUrl;
             }
 
-            if(state is CreatePostImgSavedSuccess){
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Post Uploaded Successfully!")));
+            if (state is CreatePostImgSavedSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Post Uploaded Successfully!")));
               Navigator.pop(context);
             }
           },
           builder: (context, state) {
-
-
-            if(state is CreatePostLoading){
-
-              return Center(child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                CircularProgressIndicator(),
-                Text(state.status),
-              ],),);
-            }
-            else{
+            if (state is CreatePostLoading) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                    Text(state.status),
+                  ],
+                ),
+              );
+            } else {
               return SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(15.0),
@@ -112,17 +112,22 @@ class _CreatePostState extends State<CreatePost> {
                       SizedBox(
                         height: 50,
                       ),
-                      state is CreatePostImageSelected ?  Center(
-                        child: AspectRatio(
-                          aspectRatio: 4/5,
-                          child: Container(
-                            decoration: BoxDecoration(color: Colors.blue,
-                              image: DecorationImage(image: FileImage(File(state.imgFile.path)), fit: BoxFit.cover
+                      state is CreatePostImageSelected
+                          ? Center(
+                              child: AspectRatio(
+                                aspectRatio: 4 / 5,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.blue,
+                                    image: DecorationImage(
+                                        image:
+                                            FileImage(File(state.imgFile.path)),
+                                        fit: BoxFit.cover),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
-                      ) : Text("No image selected yet"),
+                            )
+                          : Text("No image selected yet"),
                       SizedBox(
                         height: 20,
                       ),

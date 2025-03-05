@@ -17,9 +17,9 @@ Future<void> main() async {
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
   await Supabase.initialize(
-    url: 'https://fxdetvhzodhrgkrqiuxq.supabase.co',
+    url: 'https://xmxflvgpmssqnobewapi.supabase.co',
     anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ4ZGV0dmh6b2RocmdrcnFpdXhxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzcxMDY1NTcsImV4cCI6MjA1MjY4MjU1N30.neqPqf4wIO1nPco85T_9Qy3foGE46tgsLiVsnPHitv4',
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhteGZsdmdwbXNzcW5vYmV3YXBpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDEyMDQ2MDUsImV4cCI6MjA1Njc4MDYwNX0.M-on-C1L781ONU0EdlUTiOWWiEEPv7OMnHEROYZSy8c',
   );
 }
 

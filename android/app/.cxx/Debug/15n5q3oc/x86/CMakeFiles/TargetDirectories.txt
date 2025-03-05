@@ -1,0 +1,2 @@
+C:/Users/Rohaan PC/Desktop/New folder/socialmedia/android/app/.cxx/Debug/15n5q3oc/x86/CMakeFiles/edit_cache.dir
+C:/Users/Rohaan PC/Desktop/New folder/socialmedia/android/app/.cxx/Debug/15n5q3oc/x86/CMakeFiles/rebuild_cache.dir

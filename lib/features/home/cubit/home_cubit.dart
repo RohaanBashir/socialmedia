@@ -2,6 +2,7 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+import 'package:social/entities/user-profile.dart';
 import 'package:social/entities/user.dart';
 import 'package:social/features/auth/data/supabase-auth-repo.dart';
 import 'package:social/features/auth/repository/authRepo.dart';
@@ -15,6 +16,7 @@ part 'home_state.dart';
 class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
 
+  List<MyUser> users = [];
   List<Post> posts = [];
   AuthRepo authrepo = SupabaseAuthRepo();
   HomePageRepo homerepo = SupabaseHomeRepo();
@@ -29,6 +31,17 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
+  void fetchUsers()async{
+    try{
+      final response = await homerepo.fetchUsers();
+      for(int i = 0; i < response.length; i++){
+        var tempResponse = response[i];
+        users.add(MyUser(tempResponse['name'], tempResponse['email'], tempResponse['uid']));
+      }
+    }catch(e){
+      emit(HomeError(e.toString()));
+    }
+  }
   void fetchPosts() async {
     try {
       final response = await homerepo.fetchPosts();
@@ -36,9 +49,7 @@ class HomeCubit extends Cubit<HomeState> {
       for (int i = 0; i < response.length; i++) {
         var tempResponse = response[i];
         Map<String, dynamic> tempUser = tempResponse['user'];
-        print(tempUser);
         MyUser postUser = MyUser(tempUser['name'], tempUser['email'], tempUser['uid']);
-        print(postUser);
         posts.add(Post(
           postUser: postUser,
           postId: tempResponse['postid'],
@@ -52,10 +63,13 @@ class HomeCubit extends Cubit<HomeState> {
           for (int j = 0; j < comments.length; j++) {
             posts[i].comments[j] = comments[j];
           }
-          print(posts[i]);
       }
     } catch (e) {
       emit(HomeError(e.toString()));
     }
+  }
+  Future<UserProfile> returnUserProfile(MyUser user) async {
+      final response = await homerepo.getUserProfile(user);
+      return response;
   }
 }

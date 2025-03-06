@@ -77,7 +77,7 @@ class _EditProfileState extends State<EditProfile> {
             Navigator.pop(context);
             Navigator.pop(context);
             Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ProfilePage()));
+                MaterialPageRoute(builder: (context) => ProfilePage(profile: profileCubit.currentProfile!,)));
           }
         },
         builder: (context, state) {

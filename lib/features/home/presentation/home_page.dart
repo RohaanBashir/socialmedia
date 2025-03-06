@@ -10,6 +10,10 @@ import 'package:social/features/createpost/presentation/create_post.dart';
 import 'package:social/features/home/cubit/home_cubit.dart';
 import 'package:social/features/profile/presentation/profile.dart';
 
+import '../../../entities/user-profile.dart';
+import '../../../entities/user.dart';
+import '../../profile/cubit/profile_cubit.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -19,15 +23,29 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  final SearchController _searchController = SearchController();
+  final TextEditingController _textController = TextEditingController();
+
   @override
   void initState() {
     final homeCubit = BlocProvider.of<HomeCubit>(context);
     homeCubit.fetchPosts();
+    homeCubit.fetchUsers();
     super.initState();
   }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final homeCubit = BlocProvider.of<HomeCubit>(context);
+    final authCubit = BlocProvider.of<AuthCubit>(context);
+    final profile = BlocProvider.of<ProfileCubit>(context);
 
     return BlocConsumer<HomeCubit, HomeState>(
       listener: (context, state) {
@@ -55,10 +73,14 @@ class _HomePageState extends State<HomePage> {
               foregroundColor: AppColors.secondaryColor,
               backgroundColor: Colors.white10,
               centerTitle: true,
-              title: Text(
-                "Home",
-                style: TextStyle(color: Colors.black),
-              ),
+              title: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  Expanded(child:Center(child: Text("Home")), ),
+                  _buildSearchAnchor(homeCubit)
+                ],
+              )
             ),
             floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 15, bottom: 30),
@@ -112,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ProfilePage()));
+                                    builder: (context) => ProfilePage(profile:profile.currentProfile!,)));
                           },
                         ),
                         SizedBox(height: 10),
@@ -146,4 +168,61 @@ class _HomePageState extends State<HomePage> {
       },
     );
   }
+  Widget _buildSearchAnchor(HomeCubit homeCubit){
+    return SearchAnchor(
+      searchController: _searchController,
+      viewHintText: 'Search users...',
+      viewLeading: IconButton(
+        icon: const Icon(Icons.arrow_back),
+        onPressed: () => _searchController.closeView(''),
+      ),
+      builder: (BuildContext context, SearchController controller) {
+        return IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            controller.openView();
+          },
+        );
+      },
+      suggestionsBuilder: (BuildContext context, SearchController controller) {
+        final query = controller.text.toLowerCase();
+        final filteredUsers = homeCubit.users.where((user) {
+          return user.name.toLowerCase().contains(query);
+        }).toList();
+
+        return [
+          if (filteredUsers.isEmpty)
+            const Center(
+              child: Padding(
+                padding: EdgeInsets.all(16.0),
+                child: Text('No users found'),
+              ),
+            )
+          else
+
+            ...filteredUsers.map((user) => ListTile(
+              title: Text(user.name),
+              leading: CircleAvatar(
+                child: Text(user.name[0]),
+              ),
+              onTap: () async {
+                controller.closeView(user.name);
+                var userProfile = await homeCubit.returnUserProfile(user);
+                _navigateToProfile(context, userProfile);
+              },
+            )),
+        ];
+      },
+    );
+  }
+  void _navigateToProfile(BuildContext context, UserProfile user) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ProfilePage(profile: user,),
+      ),
+    );
+  }
 }
+
+

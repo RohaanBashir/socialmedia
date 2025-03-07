@@ -1,8 +1,7 @@
-// ignore_for_file: unused_import
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social/appColors/lightmode.dart';
+import 'package:social/commonWidgets/post_tile.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
 import 'package:social/features/auth/presentation/login.dart';
 import 'package:social/features/auth/repository/authRepo.dart';
@@ -22,16 +21,24 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
   final SearchController _searchController = SearchController();
   final TextEditingController _textController = TextEditingController();
 
   @override
   void initState() {
-    final homeCubit = BlocProvider.of<HomeCubit>(context);
-    homeCubit.fetchPosts();
-    homeCubit.fetchUsers();
+    _initializeData();
     super.initState();
+  }
+
+  Future<void> _initializeData() async {
+    final homeCubit = BlocProvider.of<HomeCubit>(context);
+    final authCubit = BlocProvider.of<AuthCubit>(context);
+    homeCubit.posts.clear();
+    homeCubit.users.clear();
+    homeCubit.subscribedUserIds.clear();
+    await homeCubit.fetchUsers();
+    await homeCubit.fetchUserSubscribedIds(authCubit.currentUser!.uId);
+    await homeCubit.fetchPosts();
   }
 
   @override
@@ -70,18 +77,16 @@ class _HomePageState extends State<HomePage> {
         } else {
           return Scaffold(
             appBar: AppBar(
-              foregroundColor: AppColors.secondaryColor,
-              backgroundColor: Colors.white10,
-              centerTitle: true,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-
-                  Expanded(child:Center(child: Text("Home")), ),
-                  _buildSearchAnchor(homeCubit)
-                ],
-              )
-            ),
+                foregroundColor: AppColors.secondaryColor,
+                backgroundColor: Colors.white10,
+                centerTitle: true,
+                title: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(child: Center(child: Text("Home"))),
+                    _buildSearchAnchor(homeCubit)
+                  ],
+                )),
             floatingActionButton: Padding(
               padding: const EdgeInsets.only(right: 15, bottom: 30),
               child: SizedBox(
@@ -91,9 +96,10 @@ class _HomePageState extends State<HomePage> {
                   shape: CircleBorder(),
                   backgroundColor: AppColors.secondaryColor,
                   enableFeedback: true,
-                  onPressed: () {
-                    Navigator.push(context,
+                  onPressed: () async {
+                    await Navigator.push(context,
                         MaterialPageRoute(builder: (context) => CreatePost()));
+                    _initializeData();
                   },
                   child: Icon(Icons.add),
                 ),
@@ -134,7 +140,9 @@ class _HomePageState extends State<HomePage> {
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => ProfilePage(profile:profile.currentProfile!,)));
+                                    builder: (context) => ProfilePage(
+                                          profile: profile.currentProfile!,
+                                        )));
                           },
                         ),
                         SizedBox(height: 10),
@@ -163,12 +171,23 @@ class _HomePageState extends State<HomePage> {
                 ],
               ),
             ),
+            body: RefreshIndicator(
+              onRefresh: () {
+                return _initializeData();
+              },
+              child: ListView.builder(
+                  itemCount: homeCubit.posts.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return PostTile(post: homeCubit.posts[index]);
+                  }),
+            ),
           );
         }
       },
     );
   }
-  Widget _buildSearchAnchor(HomeCubit homeCubit){
+
+  Widget _buildSearchAnchor(HomeCubit homeCubit) {
     return SearchAnchor(
       searchController: _searchController,
       viewHintText: 'Search users...',
@@ -199,30 +218,31 @@ class _HomePageState extends State<HomePage> {
               ),
             )
           else
-
             ...filteredUsers.map((user) => ListTile(
-              title: Text(user.name),
-              leading: CircleAvatar(
-                child: Text(user.name[0]),
-              ),
-              onTap: () async {
-                controller.closeView(user.name);
-                var userProfile = await homeCubit.returnUserProfile(user);
-                _navigateToProfile(context, userProfile);
-              },
-            )),
+                  title: Text(user.name),
+                  leading: CircleAvatar(
+                    child: Text(user.name[0]),
+                  ),
+                  onTap: () async {
+                    controller.closeView(user.name);
+                    var userProfile = await homeCubit.returnUserProfile(user);
+                    _navigateToProfile(context, userProfile);
+
+                  },
+                )),
         ];
       },
     );
   }
-  void _navigateToProfile(BuildContext context, UserProfile user) {
-    Navigator.push(
+
+  void _navigateToProfile(BuildContext context, UserProfile user) async {
+    await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ProfilePage(profile: user,),
+        builder: (context) => ProfilePage(
+          profile: user,
+        ),
       ),
     );
   }
 }
-
-

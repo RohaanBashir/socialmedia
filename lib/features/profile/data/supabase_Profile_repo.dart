@@ -18,7 +18,6 @@ class SupabaseProfileRepo extends ProfileRepo {
       throw Exception(e.toString());
     }
   }
-
   @override
   Future<Map<String, dynamic>> updateUserProfileData(
       MyUser user, UserProfile profile) async {
@@ -32,6 +31,22 @@ class SupabaseProfileRepo extends ProfileRepo {
       });
       return response;
     } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
+  @override
+  Future<void> UnsubscribeToUser(String currUserId, String UnsubscriberUserId)async {
+    try{
+      await supabase.from('subscriber').delete().eq('uid', currUserId ).eq('subed_uid', UnsubscriberUserId);
+    }catch(e){
+      throw Exception(e.toString());
+    }
+  }
+  @override
+  Future<void> subscribeToUser(String currUserId, String subscriberUserId) async{
+    try{
+        await supabase.from('subscriber').insert({'uid':  currUserId ,'subed_uid': subscriberUserId});
+    }catch(e){
       throw Exception(e.toString());
     }
   }

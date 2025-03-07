@@ -18,6 +18,7 @@ class HomeCubit extends Cubit<HomeState> {
 
   List<MyUser> users = [];
   List<Post> posts = [];
+  List<String> subscribedUserIds = [];
   AuthRepo authrepo = SupabaseAuthRepo();
   HomePageRepo homerepo = SupabaseHomeRepo();
 
@@ -31,7 +32,7 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  void fetchUsers()async{
+  Future<void> fetchUsers()async{
     try{
       final response = await homerepo.fetchUsers();
       for(int i = 0; i < response.length; i++){
@@ -42,9 +43,9 @@ class HomeCubit extends Cubit<HomeState> {
       emit(HomeError(e.toString()));
     }
   }
-  void fetchPosts() async {
+  Future<void> fetchPosts() async {
     try {
-      final response = await homerepo.fetchPosts();
+      final response = await homerepo.fetchPosts(subscribedUserIds);
       //loop iterating over the list
       for (int i = 0; i < response.length; i++) {
         var tempResponse = response[i];
@@ -63,7 +64,9 @@ class HomeCubit extends Cubit<HomeState> {
           for (int j = 0; j < comments.length; j++) {
             posts[i].comments[j] = comments[j];
           }
+          emit(HomeFetchUserPostsSuccess());
       }
+
     } catch (e) {
       emit(HomeError(e.toString()));
     }
@@ -71,5 +74,14 @@ class HomeCubit extends Cubit<HomeState> {
   Future<UserProfile> returnUserProfile(MyUser user) async {
       final response = await homerepo.getUserProfile(user);
       return response;
+  }
+
+  Future<void> fetchUserSubscribedIds(String UserId) async {
+    try{
+      subscribedUserIds =  await homerepo.fetchSubscribedofCurrentUser(UserId) as List<String>;
+    }catch(e){
+      emit(HomeError(e.toString()));
+      rethrow;
+    }
   }
 }

@@ -17,3 +17,9 @@ final class ProfileUpdateSuccess extends ProfileState {}
 final class ProfileFetch extends ProfileState {}
 
 final class ProfileFetchSuccess extends ProfileState {}
+
+final class ProfileSubButtonPressedLoading extends ProfileState{}
+
+final class SubButtonSuccss extends ProfileState{}
+
+

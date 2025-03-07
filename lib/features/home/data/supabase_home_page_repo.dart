@@ -9,22 +9,23 @@ class SupabaseHomeRepo implements HomePageRepo {
   final supabase = Supabase.instance.client;
 
   @override
-  Future<List<Map<String, dynamic>>> fetchPosts() async {
+  Future<List<Map<String, dynamic>>> fetchPosts(List<String> subscribedUserIds) async {
     try {
-      final response = await supabase.from('posts').select('''
-          postid,postdescription, img, likes, comments, created_at, user:uid (name, email,uid)
-        ''').order('created_at', ascending: false);
+      final response = await supabase
+          .from('posts')
+          .select('''
+      postid, postdescription, img, likes, comments, created_at, user:uid (name, email, uid)
+    ''').inFilter('uid', subscribedUserIds)
+          .order('created_at', ascending: false);
       return response;
     } catch (e) {
       throw Exception(e);
     }
   }
-
   @override
   Future<List<Map<String, dynamic>>> fetchUsers() {
     try {
       final response = supabase.from('user').select(''' uid , name , email ''');
-      print(response);
       return response;
     } catch (e) {
       throw Exception(e);
@@ -49,6 +50,21 @@ class SupabaseHomeRepo implements HomePageRepo {
         description: response[0]['description'],
       );
       return profile;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<List<String>> fetchSubscribedofCurrentUser(String curentUserId) async {
+    try {
+      final response = await supabase
+          .from('subscriber')
+          .select('subed_uid')
+          .eq('uid', curentUserId);
+      List<String> subscribedUserIds =
+          response.map((item) => item['subed_uid'] as String).toList();
+      return subscribedUserIds;
     } catch (e) {
       throw Exception(e);
     }

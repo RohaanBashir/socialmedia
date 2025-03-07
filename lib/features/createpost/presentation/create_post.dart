@@ -7,6 +7,7 @@ import 'package:social/appColors/lightmode.dart';
 import 'package:social/commonWidgets/textfield.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
 import 'package:social/features/createpost/cubit/createpost_cubit.dart';
+import 'package:social/features/home/presentation/home_page.dart';
 
 class CreatePost extends StatefulWidget {
   const CreatePost({super.key});

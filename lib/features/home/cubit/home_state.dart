@@ -17,3 +17,5 @@ final class HomeError extends HomeState {
 final class HomeSuccess extends HomeState {}
 
 final class SignoutSucess extends HomeState {}
+
+final class HomeFetchUserPostsSuccess extends HomeState {}

@@ -42,13 +42,18 @@ class AuthCubit extends Cubit<AuthState> {
       AuthResponse res = await repo.registerWithEmailAndPass(email, pass);
 
       try {
-        await Future.wait([
-          supabase.from("user").insert({
-            'uid': res.user!.id.toString(),
-            'name': name,
-            'email': email,
-          }),
-        ]);
+        await supabase.from("user").insert({
+          'uid': res.user!.id.toString(),
+          'name': name,
+          'email': email,
+        });
+
+        //marking the current user subscribed to itself
+        await supabase.from('subscriber').insert({
+          'uid': res.user!.id.toString(),
+          'subed_uid': res.user!.id.toString()
+        });
+
         currentUser = MyUser(name, email, res.user!.id);
       } catch (e) {
         emit(Error(e.toString()));

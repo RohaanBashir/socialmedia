@@ -12,6 +12,7 @@ part 'profile_state.dart';
 class ProfileCubit extends Cubit<ProfileState> {
   final profileRepo = SupabaseProfileRepo();
   final supabase = Supabase.instance.client;
+  var issubscribed = false;
   UserProfile? currentProfile;
   MyUser? currentUser;
 
@@ -48,4 +49,22 @@ class ProfileCubit extends Cubit<ProfileState> {
       emit(ProfileError(error: e.toString()));
     }
   }
+  void togglesubscribeButton(){
+    issubscribed = !issubscribed;
+  }
+  void subscribeUnsubscribeToUser(String targetUid) async{
+
+    if(issubscribed){
+      emit(ProfileSubButtonPressedLoading());
+      await profileRepo.UnsubscribeToUser(currentUser!.uId, targetUid);
+      togglesubscribeButton();
+      emit(SubButtonSuccss());
+    }else{
+      emit(ProfileSubButtonPressedLoading());
+      await profileRepo.subscribeToUser(currentUser!.uId, targetUid);
+      togglesubscribeButton();
+      emit(SubButtonSuccss());
+    }
+  }
+
 }

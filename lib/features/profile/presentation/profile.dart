@@ -179,7 +179,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            profileCubit.subscribeUnsubscribeToUser(widget.profile.uId);
+                            profileCubit.subscribeUnsubscribeToUser(widget.profile.uId,context);
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: profileCubit.issubscribed

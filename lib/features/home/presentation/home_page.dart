@@ -33,9 +33,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> _initializeData() async {
     final homeCubit = BlocProvider.of<HomeCubit>(context);
     final authCubit = BlocProvider.of<AuthCubit>(context);
-    homeCubit.posts.clear();
-    homeCubit.users.clear();
-    homeCubit.subscribedUserIds.clear();
     await homeCubit.fetchUsers();
     await homeCubit.fetchUserSubscribedIds(authCubit.currentUser!.uId);
     await homeCubit.fetchPosts();
@@ -76,112 +73,112 @@ class _HomePageState extends State<HomePage> {
           ));
         } else {
           return Scaffold(
-            appBar: AppBar(
-                foregroundColor: AppColors.secondaryColor,
-                backgroundColor: Colors.white10,
-                centerTitle: true,
-                title: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(child: Center(child: Text("Home"))),
-                    _buildSearchAnchor(homeCubit)
-                  ],
-                )),
-            floatingActionButton: Padding(
-              padding: const EdgeInsets.only(right: 15, bottom: 30),
-              child: SizedBox(
-                height: 70,
-                width: 70,
-                child: FloatingActionButton(
-                  shape: CircleBorder(),
-                  backgroundColor: AppColors.secondaryColor,
-                  enableFeedback: true,
-                  onPressed: () async {
-                    await Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => CreatePost()));
-                    _initializeData();
-                  },
-                  child: Icon(Icons.add),
+              appBar: AppBar(
+                  foregroundColor: AppColors.secondaryColor,
+                  backgroundColor: Colors.white10,
+                  centerTitle: true,
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(child: Center(child: Text("Home"))),
+                      _buildSearchAnchor(homeCubit)
+                    ],
+                  )),
+              floatingActionButton: Padding(
+                padding: const EdgeInsets.only(right: 15, bottom: 30),
+                child: SizedBox(
+                  height: 70,
+                  width: 70,
+                  child: FloatingActionButton(
+                    shape: CircleBorder(),
+                    backgroundColor: AppColors.secondaryColor,
+                    enableFeedback: true,
+                    onPressed: () async {
+                      await Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => CreatePost()));
+                      _initializeData();
+                    },
+                    child: Icon(Icons.add),
+                  ),
                 ),
               ),
-            ),
-            drawer: Drawer(
-              backgroundColor: Colors.white,
-              child: Column(
-                children: <Widget>[
-                  DrawerHeader(
-                    child: Center(
-                      child: Text(
-                        'O P T I O N S',
-                        style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold),
+              drawer: Drawer(
+                backgroundColor: Colors.white,
+                child: Column(
+                  children: <Widget>[
+                    DrawerHeader(
+                      child: Center(
+                        child: Text(
+                          'O P T I O N S',
+                          style: TextStyle(
+                              color: Colors.black,
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: ListView(
-                      padding: EdgeInsets.zero,
-                      children: <Widget>[
-                        SizedBox(height: 10),
-                        ListTile(
-                          leading: Icon(Icons.home_outlined),
-                          title: Text('H O M E'),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        ListTile(
-                          leading: Icon(Icons.person_outline),
-                          title: Text('P R O F I L E'),
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ProfilePage(
-                                          profile: profile.currentProfile!,
-                                        )));
-                          },
-                        ),
-                        SizedBox(height: 10),
-                        ListTile(
-                          leading: Icon(Icons.settings_outlined),
-                          title: Text('S E T T I N G S'),
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                        ),
-                      ],
+                    Expanded(
+                      child: ListView(
+                        padding: EdgeInsets.zero,
+                        children: <Widget>[
+                          SizedBox(height: 10),
+                          ListTile(
+                            leading: Icon(Icons.home_outlined),
+                            title: Text('H O M E'),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          ListTile(
+                            leading: Icon(Icons.person_outline),
+                            title: Text('P R O F I L E'),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ProfilePage(
+                                            profile: profile.currentProfile!,
+                                          )));
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          ListTile(
+                            leading: Icon(Icons.settings_outlined),
+                            title: Text('S E T T I N G S'),
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Divider(
-                    endIndent: 20,
-                    indent: 20,
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.logout_outlined),
-                    title: Text('L O G O U T'),
-                    onTap: () {
-                      homeCubit.signOut();
-                    },
-                  ),
-                  SizedBox(height: 20),
-                ],
+                    Divider(
+                      endIndent: 20,
+                      indent: 20,
+                    ),
+                    ListTile(
+                      leading: Icon(Icons.logout_outlined),
+                      title: Text('L O G O U T'),
+                      onTap: () {
+                        homeCubit.signOut();
+                      },
+                    ),
+                    SizedBox(height: 20),
+                  ],
+                ),
               ),
-            ),
-            body: RefreshIndicator(
-              onRefresh: () {
-                return _initializeData();
-              },
-              child: ListView.builder(
-                  itemCount: homeCubit.posts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return PostTile(post: homeCubit.posts[index]);
-                  }),
-            ),
-          );
+              body: state is HomeFetchUserPostsSuccess
+                  ? ListView.builder(
+                      itemCount: state.post.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return PostTile(post: state.post[index]);
+                      })
+                  : Center(
+                      child: CircularProgressIndicator(),
+                    ));
         }
       },
     );
@@ -226,8 +223,8 @@ class _HomePageState extends State<HomePage> {
                   onTap: () async {
                     controller.closeView(user.name);
                     var userProfile = await homeCubit.returnUserProfile(user);
-                    _navigateToProfile(context, userProfile);
-
+                    await _navigateToProfile(context, userProfile);
+                    homeCubit.fetchPosts();
                   },
                 )),
         ];
@@ -235,7 +232,8 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  void _navigateToProfile(BuildContext context, UserProfile user) async {
+  Future<void> _navigateToProfile(
+      BuildContext context, UserProfile user) async {
     await Navigator.push(
       context,
       MaterialPageRoute(

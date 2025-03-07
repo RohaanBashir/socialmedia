@@ -18,4 +18,9 @@ final class HomeSuccess extends HomeState {}
 
 final class SignoutSucess extends HomeState {}
 
-final class HomeFetchUserPostsSuccess extends HomeState {}
+final class HomeFetchUserPostsSuccess extends HomeState {
+
+  HomeFetchUserPostsSuccess({required this.post});
+    List<Post> post;
+
+}

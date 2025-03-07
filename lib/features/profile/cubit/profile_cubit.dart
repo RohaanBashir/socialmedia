@@ -1,11 +1,15 @@
 // ignore_for_file: depend_on_referenced_packages
 
 import 'package:bloc/bloc.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:social/entities/user-profile.dart';
 import 'package:social/entities/user.dart';
 import 'package:social/features/profile/data/supabase_Profile_repo.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import '../../home/cubit/home_cubit.dart';
 
 part 'profile_state.dart';
 
@@ -52,19 +56,20 @@ class ProfileCubit extends Cubit<ProfileState> {
   void togglesubscribeButton(){
     issubscribed = !issubscribed;
   }
-  void subscribeUnsubscribeToUser(String targetUid) async{
+  void subscribeUnsubscribeToUser(String targetUid, BuildContext context) async{
 
     if(issubscribed){
       emit(ProfileSubButtonPressedLoading());
+      context.read<HomeCubit>().subscribedUserIds.remove(targetUid);
       await profileRepo.UnsubscribeToUser(currentUser!.uId, targetUid);
       togglesubscribeButton();
       emit(SubButtonSuccss());
     }else{
       emit(ProfileSubButtonPressedLoading());
+      context.read<HomeCubit>().subscribedUserIds.add(targetUid);
       await profileRepo.subscribeToUser(currentUser!.uId, targetUid);
       togglesubscribeButton();
       emit(SubButtonSuccss());
     }
   }
-
 }

@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:social/appColors/lightmode.dart';
-import 'package:social/commonWidgets/post_tile.dart';
+import 'package:social/features/postTIle/presentation/post_tile.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
 import 'package:social/features/auth/presentation/login.dart';
-import 'package:social/features/auth/repository/authRepo.dart';
 import 'package:social/features/createpost/presentation/create_post.dart';
 import 'package:social/features/home/cubit/home_cubit.dart';
 import 'package:social/features/profile/presentation/profile.dart';
-
 import '../../../entities/user-profile.dart';
-import '../../../entities/user.dart';
 import '../../profile/cubit/profile_cubit.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,7 +32,7 @@ class _HomePageState extends State<HomePage> {
     final authCubit = BlocProvider.of<AuthCubit>(context);
     await homeCubit.fetchUsers();
     await homeCubit.fetchUserSubscribedIds(authCubit.currentUser!.uId);
-    await homeCubit.fetchPosts();
+    await homeCubit.fetchPosts(homeCubit.subscribedUserIds);
   }
 
   @override
@@ -133,6 +130,7 @@ class _HomePageState extends State<HomePage> {
                           ),
                           SizedBox(height: 10),
                           ListTile(
+
                             leading: Icon(Icons.person_outline),
                             title: Text('P R O F I L E'),
                             onTap: () {
@@ -224,7 +222,7 @@ class _HomePageState extends State<HomePage> {
                     controller.closeView(user.name);
                     var userProfile = await homeCubit.returnUserProfile(user);
                     await _navigateToProfile(context, userProfile);
-                    homeCubit.fetchPosts();
+                    homeCubit.fetchPosts(homeCubit.subscribedUserIds);
                   },
                 )),
         ];

@@ -28,7 +28,7 @@ class SupabsaeCreatePostRepo extends CreatePostRepo {
     try {
       final file = File(image.path);
       final fileName =
-          'posts/${DateTime.now().millisecondsSinceEpoch}_${file.uri.pathSegments.last}';
+          'posts/${DateTime.now().millisecondsSinceEpoch}${file.uri.pathSegments.last}';
       await supabase.storage.from('posts').upload(fileName, file);
       final imageUrl = supabase.storage.from('posts').getPublicUrl(fileName);
       return imageUrl;

@@ -46,38 +46,58 @@ class HomeCubit extends Cubit<HomeState> {
     }
   }
 
-  Future<void> fetchPosts() async {
+  Future<void> fetchPosts(List<String> ids) async {
     try {
       emit(HomeLoading());
       final posts = <Post>[];
-      final response = await homerepo.fetchPosts(subscribedUserIds);
-      //loop iterating over the list
-      for (int i = 0; i < response.length; i++) {
-        var tempResponse = response[i];
-        Map<String, dynamic> tempUser = tempResponse['user'];
-        MyUser postUser =
-            MyUser(tempUser['name'], tempUser['email'], tempUser['uid']);
-        posts.add(Post(
-          postUser: postUser,
-          postId: tempResponse['postid'],
-          postDescription: tempResponse['postdescription'],
-          likes: tempResponse['likes'],
-          img: tempResponse['img'],
-        ));
-        posts[i].storeDateTimeFromString(tempResponse['created_at']);
-        //assigning comments
-        List<dynamic> tempComments = tempResponse['comments'];
-        List<String> comments = tempComments.cast<String>();
-        for (int j = 0; j < comments.length; j++) {
-          posts[i].comments[j] = comments[j];
+      final response = await homerepo.fetchPosts(ids);
+
+      for (final postData in response) {
+        try {
+          final tempUser = postData['user'] as Map<String, dynamic>;
+          final postUser = MyUser(
+            tempUser['name'] as String,
+            tempUser['email'] as String,
+            tempUser['uid'] as String,
+          );
+
+          // Handle possible null values for arrays
+          final rawComments = postData['comments'] as List<dynamic>? ?? [];
+          final rawLikes = postData['likes'] as List<dynamic>? ?? [];
+
+          // Safe type conversion
+          final comments = rawComments.map((e) => e.toString()).toList();
+          final likes = rawLikes.map((e) => e.toString()).toList();
+
+          final post = Post(
+            postUser: postUser,
+            postId: postData['postid'] as String,
+            postDescription: postData['postdescription'] as String,
+            img: postData['img'] as String?, // Initialize directly in constructor
+          );
+
+          for (final comment in comments) {
+            post.comments.add(comment);
+          }
+          for(final like in likes){
+            post.likes.add(like);
+          }
+          // Handle date parsing safely
+          if (postData['created_at'] != null) {
+            post.storeDateTimeFromString(postData['created_at'].toString());
+          }
+
+          posts.add(post);
+        } catch (e) {
+          print('Error processing post: $e');
         }
-        emit(HomeFetchUserPostsSuccess(post: posts));
       }
+
+      emit(HomeFetchUserPostsSuccess(post: posts));
     } catch (e) {
       emit(HomeError(e.toString()));
     }
   }
-
   Future<UserProfile> returnUserProfile(MyUser user) async {
     final response = await homerepo.getUserProfile(user);
     return response;

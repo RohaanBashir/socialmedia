@@ -4,7 +4,7 @@ class Post {
   MyUser? postUser;
   String? postId;
   String? postDescription;
-  int likes;
+  List<String> likes = List.filled(1, "", growable: true);
   String? img;
   List<String> comments = List.filled(1, "", growable: true);
   DateTime? date;
@@ -13,7 +13,6 @@ class Post {
     this.postUser,
     this.postId,
     this.postDescription,
-    this.likes = 0,
     this.img,
     this.date,
   });

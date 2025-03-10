@@ -13,6 +13,8 @@ import 'package:social/features/home/presentation/home_page.dart';
 import 'package:social/features/profile/cubit/profile_cubit.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
+import 'features/postTIle/cubit/post_tile_cubit.dart';
+
 Future<void> main() async {
   runApp(const MyApp());
   WidgetsFlutterBinding.ensureInitialized();
@@ -45,6 +47,11 @@ class MyApp extends StatelessWidget {
         BlocProvider<CreatepostCubit>(
           create: (context) => CreatepostCubit(),
         ),
+        BlocProvider<PostTileCubit>(
+          create: (context) => PostTileCubit(),
+        ),
+
+
         // Add more BlocProvider instances here
       ],
       child: MaterialApp(

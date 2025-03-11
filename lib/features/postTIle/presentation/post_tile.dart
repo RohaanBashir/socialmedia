@@ -5,11 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../appColors/lightmode.dart';
 import '../../../entities/post.dart';
 import '../../auth/cubit/auth_cubit.dart';
+import '../../comments/cubit/comment_cubit.dart';
+import '../../comments/presentation/comment_page.dart';
 import '../cubit/post_tile_cubit.dart';
 
 class PostTile extends StatefulWidget {
   final Post post;
-
   const PostTile({super.key, required this.post});
 
   @override
@@ -24,6 +25,7 @@ class _PostTileState extends State<PostTile> {
   Widget build(BuildContext context) {
     final profileTileCubit = BlocProvider.of<PostTileCubit>(context);
     final authCubit = BlocProvider.of<AuthCubit> (context);
+    final comments = BlocProvider.of<CommentCubit>(context);
 
     return BlocConsumer<PostTileCubit, PostTileState>(
       listener: (context, state) {
@@ -119,12 +121,20 @@ class _PostTileState extends State<PostTile> {
                           const Icon(Icons.comment,
                               size: 30.0, color: Colors.green),
                           const SizedBox(width: 4.0),
-                          Text(
-                            "${widget.post.comments.length - 2 } comments",
-                            style: const TextStyle(
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.bold,
+                          GestureDetector(
+                            child: Text(
+                              "${widget.post.comments.length - 2 } comments",
+                              style: const TextStyle(
+                                fontSize: 14.0,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
+                            onTap: () async {
+                              await Navigator.push(context, MaterialPageRoute(builder: (context)=> CommentsPage(post: widget.post)));
+                              profileTileCubit.refresh();
+                              comments.comments.clear();
+                              comments.comments.add("");
+                            },
                           ),
                         ],
                       ),

@@ -30,5 +30,9 @@ class PostTileCubit extends Cubit<PostTileState> {
     }
   }
 
+  void refresh(){
+    emit(PostLikeOrUnLikeSuccess());
+  }
+
 
 }

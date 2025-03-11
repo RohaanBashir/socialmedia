@@ -112,4 +112,5 @@ class HomeCubit extends Cubit<HomeState> {
       rethrow;
     }
   }
+
 }

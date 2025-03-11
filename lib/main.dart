@@ -6,6 +6,7 @@ import 'package:social/appColors/lightmode.dart';
 import 'package:social/features/auth/cubit/auth_cubit.dart';
 import 'package:social/features/auth/presentation/login.dart';
 import 'package:social/features/auth/presentation/register.dart';
+import 'package:social/features/comments/cubit/comment_cubit.dart';
 import 'package:social/features/createpost/cubit/createpost_cubit.dart';
 import 'package:social/features/editprofile/cubit/editprofile_cubit.dart';
 import 'package:social/features/home/cubit/home_cubit.dart';
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
         BlocProvider<PostTileCubit>(
           create: (context) => PostTileCubit(),
         ),
+        BlocProvider<CommentCubit>(
+          create: (context) => CommentCubit(),
+        )
 
 
         // Add more BlocProvider instances here

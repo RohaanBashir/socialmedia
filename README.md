@@ -61,28 +61,16 @@ A scalable and maintainable **social media application** built using **Flutter**
 - Search User Page
 
 
-<img src="ss/1.jpg width="300"/>
-
-
-<img src="ss/2.jpg"  width="100"/>
-
-
-<img src="ss/3.jpg"  width="100"/>
-
-
-<img src="ss/4.jpg" width="100"/>
-
-
-<img src="ss/5.jpg"  width="100"/>
-
-
-<img src="ss/6.jpg"width="100"/>
-
-
-<img src="ss/7.jpg"  width="100"/>
-
-
-<img src="ss/8.jpg" width="100"/>
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+  <img src="ss/1.jpg" alt="Home Screen" width="200"/>
+  <img src="ss/2.jpg" alt="Post Screen" width="200"/>
+  <img src="ss/3.jpg" alt="Profile Screen" width="200"/>
+  <img src="ss/4.jpg" alt="Comments Screen" width="200"/>
+  <img src="ss/5.jpg" alt="Login Screen" width="200"/>
+  <img src="ss/6.jpg" alt="Register Screen" width="200"/>
+  <img src="ss/7.jpg" alt="Register Screen" width="200"/>
+  <img src="ss/8.jpg" alt="Register Screen" width="200"/>
+</div>
 ---
 
 ## 🚀 Getting Started

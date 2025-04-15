@@ -20,11 +20,14 @@ A scalable and maintainable **social media application** built using **Flutter**
   - Create new posts with text/media support *(media support coming soon)*
 
 - 💬 **Comments**
-  - Add and view comments under each post
+  - Add and view comments on posts
 
 - 🙋‍♂️ **Profile Management**
   - View other users' profiles
   - Edit your own profile (username, bio, etc.)
+
+- 🔍 **Search User**
+  - Search and view other users' profiles by username
 
 - 🎯 **State Management**
   - BLoC architecture for clean separation of UI and business logic
@@ -36,13 +39,13 @@ A scalable and maintainable **social media application** built using **Flutter**
 
 ## 🛠️ Tech Stack
 
-| Layer               | Technology        |
-|--------------------|-------------------|
-| UI                 | Flutter           |
+| Layer               | Technology         |
+|--------------------|--------------------|
+| UI                 | Flutter            |
 | Architecture       | CLEAN Architecture |
-| State Management   | BLoC              |
-| Backend/Database   | Supabase          |
-| Authentication     | Supabase Auth     |
+| State Management   | BLoC               |
+| Backend/Database   | Supabase           |
+| Authentication     | Supabase Auth      |
 
 ---
 
@@ -55,6 +58,7 @@ A scalable and maintainable **social media application** built using **Flutter**
 - Comments Page
 - Profile Page
 - Edit Profile Page
+- Search User Page
 
 > 📷 *Screenshots coming soon!*
 

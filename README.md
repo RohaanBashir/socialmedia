@@ -60,29 +60,29 @@ A scalable and maintainable **social media application** built using **Flutter**
 - Edit Profile Page
 - Search User Page
 
-<p>Home Screen</p>
+
 <img src="ss/1.jpg width="300"/>
 
-<p>Post Screen</p>
-<img src="ss/2.jpg"  width="300"/>
 
-<p>Profile Screen</p>
-<img src="ss/3.jpg"  width="300"/>
+<img src="ss/2.jpg"  width="100"/>
 
-<p>Home Screen</p>
-<img src="ss/4.jpg" width="300"/>
 
-<p>Post Screen</p>
-<img src="ss/5.jpg"  width="300"/>
+<img src="ss/3.jpg"  width="100"/>
 
-<p>Profile Screen</p>
-<img src="ss/6.jpg"width="300"/>
 
-<p>Profile Screen</p>
-<img src="ss/7.jpg"  width="300"/>
+<img src="ss/4.jpg" width="100"/>
 
-<p>Profile Screen</p>
-<img src="ss/8.jpg" width="300"/>
+
+<img src="ss/5.jpg"  width="100"/>
+
+
+<img src="ss/6.jpg"width="100"/>
+
+
+<img src="ss/7.jpg"  width="100"/>
+
+
+<img src="ss/8.jpg" width="100"/>
 ---
 
 ## 🚀 Getting Started

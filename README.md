@@ -52,7 +52,7 @@ A scalable and maintainable **social media application** built using **Flutter**
 ## 📸 database diagram
 
 <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-  <img src="ss/db.png" alt="Home Screen" width="200"/>
+  <img src="ss/db.png" alt="Home Screen" width="600"/>
  
 </div>
 
